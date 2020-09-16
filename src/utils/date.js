@@ -10,9 +10,9 @@ function getDayNames(locale) {
   return dayNames;
 }
 
-function getMonthNamess(locale) {
+function getMonthNames(locale) {
   var monthNames = [],
-    baseDate = new Date(Date.UTC(2017, 0, 1)); // just a Monday
+    baseDate = new Date(Date.UTC(2017, 0, 1)); // just a Day in January
 
   for (var i = 0; i < 12; i++) {
     monthNames.push(baseDate.toLocaleDateString(locale, { month: "long" }));
@@ -22,19 +22,42 @@ function getMonthNamess(locale) {
   return monthNames;
 }
 
+function getMonthName(index, locale) {
+  // -1 because January is 0 instead of 1
+  // returned from getDateUnit for 'month'
+  // % 12 because 13 should be 1
+  index = Math.abs((index - 1) % 12);
+  return getMonthNames(locale)[index];
+}
+
 function addMonths(date, count) {
   if (date && count) {
-    var m,
+    var month,
       // dont remove the '+' in front of the date
       // http://xkr.us/articles/javascript/unary-add/
-      d = (date = new Date(+date)).getDate();
+      day = (date = new Date(+date)).getDate();
 
     date.setMonth(date.getMonth() + count, 1);
-    m = date.getMonth();
-    date.setDate(d);
-    if (date.getMonth() !== m) date.setDate(0);
+    month = date.getMonth();
+
+    date.setDate(day);
+
+    if (date.getMonth() !== month) {
+      date.setDate(0);
+    }
   }
+
   return date;
+}
+
+function firstDayOfMonth(month, year) {
+  return new Date(year, month - 1).getDay() - 1;
+}
+
+function daysInMonth(month, year) {
+  // don't -1 for the month!
+  // it is actually (month -1) + 1 to get the correct value
+  return new Date(year, month, 0).getDate();
 }
 
 export function DateUtil(now, locale) {
@@ -50,48 +73,20 @@ export function DateUtil(now, locale) {
         return date.getMonth() + 1;
       case "year":
         return date.getFullYear();
-      default:
-        throw new Error("Wrong date unit");
     }
   }
-
-  var currentMonth = getDateUnit("month", now),
-    currentYear = getDateUnit("year", now);
 
   return {
     now: now,
     displayDate: now,
     currentDay: getDateUnit("day", now),
-    currentMonth: currentMonth,
-    currentYear: currentYear,
+    currentMonth: getDateUnit("month", now),
+    currentYear: getDateUnit("year", now),
     addMonths: addMonths,
-    firstDayOfMonth: function (month, year) {
-      return new Date(year, month - 1).getDay() - 1;
-    },
-    daysInMonth: function (month, year) {
-      // don't -1 for the month!
-      // it is actually (month -1) + 1 to get the correct value
-      return new Date(year, month, 0).getDate();
-    },
-    getDateUnit: function (unit, date) {
-      switch (unit) {
-        case "day":
-          return date.getDate();
-        case "month":
-          return date.getMonth() + 1;
-        case "year":
-          return date.getFullYear();
-        default:
-          throw new Error("Unknown date unit");
-      }
-    },
+    firstDayOfMonth: firstDayOfMonth,
+    daysInMonth: daysInMonth,
+    getDateUnit: getDateUnit,
     dayNames: getDayNames(locale),
-    getMonthName: function (index) {
-      // -1 because January is 0 instead of 1
-      // returned from getDateUnit for 'month'
-      // % 12 because 13 should be 1
-      index = Math.abs((index - 1) % 12);
-      return getMonthNamess(locale)[index];
-    },
+    getMonthName: getMonthName,
   };
 }
