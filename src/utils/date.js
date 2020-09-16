@@ -37,7 +37,7 @@ function addMonths(date, count) {
   return date;
 }
 
-var DateUtil = function (now, locale) {
+export function DateUtil(now, locale) {
   // remove seconds and miliseconds from the date
   // to normalise programmatic differences
   now = new Date(now.setSeconds(0, 0));
@@ -51,11 +51,7 @@ var DateUtil = function (now, locale) {
       case "year":
         return date.getFullYear();
       default:
-        throw new Error(
-          "Date unit not known - given: " +
-            unit +
-            " (expected: day, month or year)"
-        );
+        throw new Error("Wrong date unit");
     }
   }
 
@@ -86,7 +82,7 @@ var DateUtil = function (now, locale) {
         case "year":
           return date.getFullYear();
         default:
-          throw new Error("Date unit not known");
+          throw new Error("Unknown date unit");
       }
     },
     dayNames: getDayNames(locale),
@@ -98,6 +94,4 @@ var DateUtil = function (now, locale) {
       return getMonthNamess(locale)[index];
     },
   };
-};
-
-export default DateUtil;
+}
