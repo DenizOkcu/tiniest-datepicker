@@ -162,6 +162,7 @@ function renderTable(datepicker) {
 
 export function draw(datepicker) {
   var daysList,
+    datepickerDocument = datepicker.document,
     queryString = datepicker.selectPast ? "td.day" : "td.day:not(.inactive)",
     pickOnClick = function (event) {
       var dateParts = event.target.dataset.day.split("-");
@@ -173,13 +174,13 @@ export function draw(datepicker) {
   datepicker.container.innerHTML = renderTable(datepicker);
   datepicker.container.style.display = "block";
 
-  daysList = datepicker.document.querySelectorAll(queryString);
+  daysList = datepickerDocument.querySelectorAll(queryString);
 
   for (var i = daysList.length - 1; i >= 0; i--) {
     daysList[i].addEventListener("mousedown", pickOnClick);
   }
 
-  datepicker.document
+  datepickerDocument
     .getElementById("plus-wrapper") // month plus listener
     .addEventListener("mousedown", function (e) {
       e.stopPropagation();
@@ -189,7 +190,7 @@ export function draw(datepicker) {
       );
       draw(datepicker);
     });
-  datepicker.document
+  datepickerDocument
     .getElementById("minus-wrapper") // month minus listener
     .addEventListener("mousedown", function (e) {
       e.stopPropagation();
