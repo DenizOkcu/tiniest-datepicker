@@ -1,0 +1,69 @@
+body {
+  font-size: 20px;
+  font-family: Roboto, Arial, sans-serif;
+}
+table {
+  table-layout: fixed;
+}
+.icon-close {
+  margin-left: 250px;
+}
+.datepicker {
+  width: 380px;
+}
+#plus-wrapper,
+#minus-wrapper {
+  font-size: 35px;
+  float: right;
+}
+.day-names td {
+  color: gray;
+  height: 50px;
+  width: 50px;
+}
+.day {
+  height: 50px;
+  width: 50px;
+}
+
+.day.inactive {
+  height: 50px;
+  width: 50px;
+}
+
+.inactive {
+  height: 0px;
+  width: 0px;
+}
+
+.month-selector,
+.head {
+  margin-left: 10px;
+}
+.month-container {
+  margin-top: 20px;
+}
+.body {
+  text-align: center;
+}
+td.day.inactive {
+  background: #fff;
+  color: gray !important;
+  border-radius: 50%;
+}
+td.day.selected {
+  background: #74f7b5;
+  color: white !important;
+  border-radius: 50%;
+}
+td.day.today {
+  background: #6f86fc;
+  color: white !important;
+  border-radius: 50%;
+}
+
+td.day:hover {
+  background: #2222b5;
+  color: white !important;
+  border-radius: 50%;
+}

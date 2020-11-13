@@ -1,14 +1,13 @@
 import { DateUtil } from "../utils/date";
 import { setupHtml, addListeners } from "../utils/setup";
 
-function init(datepicker) {
-  setupHtml(datepicker);
-  addListeners(datepicker);
-}
-
 export function DatePicker(options = {}) {
   var datepicker = this,
-    datepickerDocument = options._document || document;
+    datepickerDocument = options._document || document,
+    init = function init(datepicker) {
+      setupHtml(datepicker);
+      addListeners(datepicker);
+    };
 
   datepicker.document = datepickerDocument;
 

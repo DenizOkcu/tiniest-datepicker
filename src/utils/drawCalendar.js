@@ -52,12 +52,14 @@ function renderDay(datepicker, row, day, displayDate) {
     classNames.push("today");
   }
 
+  if (displayDay === dateUtil.displayDate.getDate()) {
+    classNames.push("selected");
+  }
+
   return (
     '<td class="' +
     classNames.join(" ") +
-    '"><span class="calendar-day" id="' +
-    datepicker.input.type +
-    '-datepicker" data-day="' +
+    '"><span class="calendar-day" data-day="' +
     getDateUnit("year", displayDate) +
     "-" +
     getDateUnit("month", displayDate) +
@@ -118,21 +120,13 @@ function renderTable(datepicker) {
       '<div class="table">' +
       '<div class="head">' +
       datepicker.title +
-      '<div class="head-closer">' +
       '<i class="icon-close">x</i>' +
-      "</div>" +
       "</div>";
 
   // loop through the number of months
   for (var i = 0; i < noOfMonths; i++) {
     displayDate = dateUtil.addMonths(displayDate, i);
     result += '<div class="month-container"><div class="month-selector">';
-
-    // only the first line gets the left '<' icon
-    result +=
-      i === 0
-        ? '<div id="minus-wrapper"> <span id="minus">-</span> </div>'
-        : "";
 
     // add the month's name
     result +=
@@ -145,11 +139,12 @@ function renderTable(datepicker) {
       getDateUnit("year", displayDate) +
       "</span>";
 
+    // only the first line gets the left '<' icon
+    result += i === 0 ? '<div id="minus-wrapper">&#8249;</div>' : "";
+
     // only the last line gets the right '>' icon
     result +=
-      i === noOfMonths - 1
-        ? '<div id="plus-wrapper"> <span id="plus">+</span> </div>'
-        : "";
+      i === noOfMonths - 1 ? '<div id="plus-wrapper">&#8250;</div>' : "";
 
     // close the month selector div
     // and add the month calendar body
@@ -160,7 +155,7 @@ function renderTable(datepicker) {
   return result + "</div>";
 }
 
-export function draw(datepicker) {
+export function drawCalendar(datepicker) {
   var daysList,
     datepickerDocument = datepicker.document,
     queryString = datepicker.selectPast ? "td.day" : "td.day:not(.inactive)",
@@ -188,7 +183,7 @@ export function draw(datepicker) {
         datepicker.dateUtil.displayDate,
         1
       );
-      draw(datepicker);
+      drawCalendar(datepicker);
     });
   datepickerDocument
     .getElementById("minus-wrapper") // month minus listener
@@ -198,6 +193,6 @@ export function draw(datepicker) {
         datepicker.dateUtil.displayDate,
         -1
       );
-      draw(datepicker);
+      drawCalendar(datepicker);
     });
 }
